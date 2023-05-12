@@ -24,6 +24,7 @@ class User(AbstractBaseUser):
    password = models.CharField(max_length=120)
    name = models.CharField(max_length=255)
    created_at = models.DateTimeField(auto_now_add=True)
+   is_instructor = models.BooleanField(default=False)
    is_staff = models.BooleanField(default=False)
    is_superuser = models.BooleanField(default=False)
 

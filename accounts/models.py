@@ -1,9 +1,11 @@
 # Django Import
+from shortuuid.django_fields import ShortUUIDField
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 
 # Own import
 import uuid
+from django.conf import settings
 
 class UserManager(BaseUserManager):
 
@@ -41,8 +43,8 @@ class User(AbstractUser):
       return self.email
 
 class Instructor(models.Model):
-   id = models.UUIDField(primary_key=True)
-   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='instructor')
+   id = ShortUUIDField(primary_key=True, max_length=6, editable=False)
+   user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='instructor')
    bio = models.CharField(max_length=250)
    contact_info = models.CharField(max_length=250)
    profile_picture = models.ImageField(upload_to='Unilearn\profile_pictures')
@@ -51,8 +53,8 @@ class Instructor(models.Model):
       return self.user.email
 
 class Student(models.Model):
-   id = models.UUIDField(primary_key=True)
-   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
+   id = ShortUUIDField(primary_key=True, max_length=6, editable=False)
+   user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='student')
    matric_no = models.IntegerField()
 
    def __str__(self):

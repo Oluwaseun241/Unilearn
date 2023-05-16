@@ -17,6 +17,9 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+# Custom User
+AUTH_USER_MODEL = 'accounts.User'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -115,5 +118,3 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Custom User
-AUTH_USER_MODEL = 'accounts.User'

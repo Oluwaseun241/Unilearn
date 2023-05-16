@@ -1,6 +1,9 @@
 # Django Import
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+
+# Own import
+import uuid
 
 class UserManager(BaseUserManager):
 
@@ -13,20 +16,21 @@ class UserManager(BaseUserManager):
       user.save()
       return user
 
-      def create_superuser(self, email, password=None, **extra_fields):
-         extra_fields.setdefault('is_staff', True)
-         extra_fields.setdefault('is_superuser', True)
-         return self.create_user(email, password, **extra_fields)
+   def create_superuser(self, email, password=None, **extra_fields):
+      extra_fields.setdefault('is_staff', True)
+      extra_fields.setdefault('is_superuser', True)
+      return self.create_user(email, password, **extra_fields)
 
-class User(AbstractBaseUser):
-   id = models.UUIDField(primary_key=True)
+class User(AbstractUser):
+   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+   username = None
    email = models.EmailField(unique=True)
    password = models.CharField(max_length=120)
    name = models.CharField(max_length=255)
    created_at = models.DateTimeField(auto_now_add=True)
    is_instructor = models.BooleanField(default=False)
-   is_staff = models.BooleanField(default=False)
-   is_superuser = models.BooleanField(default=False)
+   # is_staff = models.BooleanField(default=False)
+   # is_superuser = models.BooleanField(default=False)
 
    objects = UserManager()
 
@@ -42,6 +46,14 @@ class Instructor(models.Model):
    bio = models.CharField(max_length=250)
    contact_info = models.CharField(max_length=250)
    profile_picture = models.ImageField(upload_to='Unilearn\profile_pictures')
+
+   def __str__(self):
+      return self.user.email
+
+class Student(models.Model):
+   id = models.UUIDField(primary_key=True)
+   user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student')
+   matric_no = models.IntegerField()
 
    def __str__(self):
       return self.user.email

@@ -52,6 +52,3 @@ class InstructorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instructor
         fields = '__all__'
-# Password reset
-class PasswordResetRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField()

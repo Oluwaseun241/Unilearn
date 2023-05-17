@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 # Rest_framework Imports
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 # Own Imports
 from .models import User

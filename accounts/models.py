@@ -43,17 +43,17 @@ class User(AbstractUser):
       return self.email
 
 class Instructor(models.Model):
-   id = ShortUUIDField(primary_key=True, max_length=6, editable=False)
+   id = ShortUUIDField(primary_key=True, length=6, max_length=6, editable=False)
    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='instructor')
    bio = models.CharField(max_length=250)
    contact_info = models.CharField(max_length=250)
-   profile_picture = models.ImageField(upload_to='Unilearn\profile_pictures')
+   profile_picture = models.ImageField(upload_to='Unilearn\profile_pictures', null=True)
 
    def __str__(self):
       return self.user.email
 
 class Student(models.Model):
-   id = ShortUUIDField(primary_key=True, max_length=6, editable=False)
+   id = ShortUUIDField(primary_key=True, length=6, max_length=6, editable=False)
    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='student')
    matric_no = models.IntegerField()
 

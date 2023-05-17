@@ -1,3 +1,5 @@
+# Django Imports
+from django.core.management.utils import get_random_secret_key
 # Third party Imports
 from pathlib import Path
 from datetime import timedelta
@@ -10,14 +12,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@7v47r*j4ls&40uik1=mjatv0nz#kdrja2p7)ddl9yj55(h$_u'
+SECRET_KEY = get_random_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+FRONTEND_URL = "https://oluwaseun.live"
+EMAIL_FROM = "unilearn@gmail.com"
 
 # Application definition
 
@@ -31,7 +34,8 @@ INSTALLED_APPS = [
     # Third party
     'rest_framework',
     'rest_framework_simplejwt',
-
+    'django_rest_passwordreset',
+    # Apps
     'accounts',
 ]
 
@@ -132,3 +136,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '@gmail.com'
+EMAIL_HOST_PASSWORD = 'your-email-password'
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

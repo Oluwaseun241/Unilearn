@@ -10,10 +10,11 @@ from .serializers import (
     UserSerializer, 
     UserRegisterSerializer, 
     StudentSerializer, 
-    InstructorSerializer
+    InstructorSerializer,
+    ChangePasswordSerializer
     )
 
-class RegisterUser(generics.CreateAPIView):
+class RegisterUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = None
 
@@ -37,3 +38,32 @@ class RegisterUser(generics.CreateAPIView):
             else:
                 self.serializer_class = StudentSerializer
         return self.serializer_class
+
+class ChangePasswordView(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self,queryset=None):
+        obj = self.request.user
+        return obj
+
+    def update(self, request, *args,**kwargs):
+        self.object = self.get_object()
+        serializer = selg.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            # Check old password
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+            # Set new password
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            response = {
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'Password updated successfully',
+                'data': []
+            }
+            return Response(response)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

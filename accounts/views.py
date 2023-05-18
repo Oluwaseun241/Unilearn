@@ -49,7 +49,7 @@ class ChangePasswordView(generics.UpdateAPIView):
 
     def update(self, request, *args,**kwargs):
         self.object = self.get_object()
-        serializer = selg.get_serializer(data=request.data)
+        serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
             # Check old password

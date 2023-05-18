@@ -10,6 +10,7 @@ pillow = "*"
 django-shortuuidfield = "*"
 djangorestframework-simplejwt = "*"
 django-rest-passwordreset = "*"
+django-cors-headers = "*"
 
 [dev-packages]
 

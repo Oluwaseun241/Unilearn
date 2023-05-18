@@ -55,6 +55,7 @@ class User(AbstractUser):
 
 
 class Instructor(models.Model):
+    id = ShortUUIDField(primary_key=True, length=6, max_length=6, editable=False)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='instructor')
     bio = models.CharField(max_length=250)
     contact_info = models.CharField(max_length=250)
@@ -65,6 +66,7 @@ class Instructor(models.Model):
 
 
 class Student(models.Model):
+    id = ShortUUIDField(primary_key=True, length=6, max_length=6, editable=False)
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='student')
     matric_no = models.IntegerField()
 

@@ -7,39 +7,35 @@ from rest_framework.response import Response
 # Own Imports
 from .models import User, Student
 from .serializers import (
-    RegisterUserSerializer,
+    UserSerializer,
+    RegistrationSerializer,
     StudentSerializer,
     InstructorSerializer,
     ChangePasswordSerializer
 )
 
-
 class RegisterUserView(generics.CreateAPIView):
+    serializer_class = UserSerializer
+
+class ProfileUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
-    serializer_class = RegisterUserSerializer
+    serializer_class = RegistrationSerializer
 
     def create(self, request, *args, **kwargs):
-        is_instructor = request.data.get('is_instructor', False)
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        is_instructor = serializer.validated_data.get('is_instructor', False)
         if is_instructor:
             instructor_serializer = InstructorSerializer(data=request.data)
             instructor_serializer.is_valid(raise_exception=True)
             instructor = instructor_serializer.save()
-            user = User.objects.create_user(email=serializer.validated_data['email'],
-                                            password=serializer.validated_data['password'],
-                                            name=serializer.validated_data['name'],
-                                            is_instructor=True)
-            instructor.user = user
-            instructor.save()
+            return Response(InstructorSerializer(instructor).data, status=status.HTTP_201_CREATED)
         else:
-            user = User.objects.create_user(email=serializer.validated_data['email'],
-                                            password=serializer.validated_data['password'],
-                                            name=serializer.validated_data['name'],
-                                            is_instructor=False)
-
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+            student_serializer = StudentSerializer(data=request.data)
+            student_serializer.is_valid(raise_exception=True)
+            student = student_serializer.save()
+            return Response(StudentSerializer(student).data, status=status.HTTP_201_CREATED)
 
 
 class ChangePasswordView(generics.UpdateAPIView):

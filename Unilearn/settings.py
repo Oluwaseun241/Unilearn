@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_rest_passwordreset',
     'rest_framework_simplejwt.token_blacklist',
+    'drf_yasg',
     "corsheaders",
     # Apps
     'accounts',
@@ -114,7 +115,7 @@ REST_FRAMEWORK = {
 
 # JWT configurations
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
@@ -123,7 +124,7 @@ SIMPLE_JWT = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Lagos'
 
 USE_I18N = True
 
@@ -141,3 +142,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+   }
+}

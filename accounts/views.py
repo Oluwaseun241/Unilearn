@@ -11,32 +11,38 @@ from .serializers import (
     RegistrationSerializer,
     StudentSerializer,
     InstructorSerializer,
-    ChangePasswordSerializer
+    ChangePasswordSerializer,
+    UserProfileSerializer
 )
 
 class RegisterUserView(generics.CreateAPIView):
     serializer_class = UserSerializer
+    
 
 class ProfileUserView(generics.CreateAPIView):
-    permission_classes = [AllowAny]
     serializer_class = RegistrationSerializer
+    permission_classes = [AllowAny]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        user = request.user
+
         is_instructor = serializer.validated_data.get('is_instructor', False)
         if is_instructor:
             instructor_serializer = InstructorSerializer(data=request.data)
             instructor_serializer.is_valid(raise_exception=True)
-            instructor = instructor_serializer.save()
+            instructor = instructor_serializer.save(user=user)
             return Response(InstructorSerializer(instructor).data, status=status.HTTP_201_CREATED)
         else:
             student_serializer = StudentSerializer(data=request.data)
             student_serializer.is_valid(raise_exception=True)
-            student = student_serializer.save()
+            student = student_serializer.save(user=user)
             return Response(StudentSerializer(student).data, status=status.HTTP_201_CREATED)
 
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
 
 class ChangePasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
@@ -66,3 +72,7 @@ class ChangePasswordView(generics.UpdateAPIView):
             return Response(response)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UserProfileUpdateView(generics.UpdateAPIView):
+    serializer_class = UserProfileSerializer
+    permission_classes = [IsAuthenticated]

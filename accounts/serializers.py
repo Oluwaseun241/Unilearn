@@ -37,7 +37,23 @@ class RegistrationSerializer(serializers.Serializer):
     is_instructor = serializers.BooleanField(default=False)
     matric_no = serializers.IntegerField(required=False, allow_null=True)
 
+    def create(self, validated_data):
+        user_id = self.context['user_id']
+
+        is_instructor = validated_data.get('is_instructor', False)
+        if is_instructor:
+            instructor = Instructor.objects.create(user_id=user_id, **validated_data)
+            return instructor
+        else:
+            student = Student.objects.create(user_id=user_id, **validated_data)
+            return student
+
 class ChangePasswordSerializer(serializers.Serializer):
     model = User
     old_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'

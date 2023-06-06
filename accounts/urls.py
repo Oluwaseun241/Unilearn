@@ -25,4 +25,5 @@ urlpatterns = [
     # User profile
     path("user-profile/", ProfileUserView.as_view(), name='user_profile'),
     path("profile/update", UserProfileUpdateView.as_view(), name='profile-update'),
+    path("", include("course.urls"))
 ]

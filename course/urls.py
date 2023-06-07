@@ -10,6 +10,7 @@ from .views import (
 urlpatterns = [
     path("courses/", CourseListView.as_view(), name='course_list'),   
     path("courses/<str:pk>/", CourseDetailView.as_view(), name='course_detail'),
-    path("courses/<str:course_pk>/materials/<str:pk>/", MaterialDetailView.as_view(), name='course_detail'),
-    path("courses/<str:course_pk>/enrollments/", EnrollmentCreateView.as_view(), name='course_list'),
+    path("courses/<str:pk>/materials/", MaterialCreateView.as_view(), name='material_create'),
+    path("courses/<str:course_pk>/materials/<str:pk>/", MaterialDetailView.as_view(), name='material_detail'),
+    path("courses/<str:course_pk>/enrollments/", EnrollmentCreateView.as_view(), name='enrollment_create'),
 ]

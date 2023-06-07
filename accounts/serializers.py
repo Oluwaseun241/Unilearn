@@ -1,6 +1,5 @@
 # Rest_framework imports
 from rest_framework import serializers
-from django.core.exceptions import ValidationError
 # Own imports
 from .models import User, Instructor, Student
 

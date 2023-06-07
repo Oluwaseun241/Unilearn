@@ -1,5 +1,4 @@
 # Django imports
-from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
@@ -22,14 +21,17 @@ class CourseDetailView(generics.RetrieveAPIView):
 class MaterialCreateView(generics.CreateAPIView):
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
+    permission_classes = [IsAuthenticated]
 
 class MaterialDetailView(generics.RetrieveAPIView):
     queryset = Material.objects.all()
     serializer_class = MaterialSerializer
+    permission_classes = [IsAuthenticated]
 
 class EnrollmentCreateView(generics.CreateAPIView):
     queryset = Enrollment.objects.all()
     serializer_class = EnrollmentSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(course_id=self.kwargs['course_pk'], user_id=self.request.user_id)

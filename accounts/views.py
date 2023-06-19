@@ -1,6 +1,6 @@
 # Rest_framework Imports
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 # Own Imports
 from .serializers import (
@@ -18,7 +18,7 @@ class RegisterUserView(generics.CreateAPIView):
 
 class ProfileUserView(generics.CreateAPIView):
     serializer_class = RegistrationSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
